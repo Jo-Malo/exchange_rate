@@ -4,19 +4,17 @@ require_relative "../lib/extra/error"
 require_relative "../lib/extra/conversion"
 require "minitest/autorun"
 require 'simplecov'
-SimpleCov.start 'rails' do
-  add_filter '/bin/'
-  add_filter '/db/'
-  add_filter '/spec/' # for rspec
-  add_filter '/test/' # for minitest
-end
+
+  SimpleCov.start 'rails' do
+    add_filter '/bin/'
+    add_filter '/db/'
+    add_filter '/spec/' # for rspec
+    add_filter '/test/' # for minitest
+  end
 
 class ExchangeRateTest < Minitest::Test
 
 # TESTS FOR ERROR.RB in case of invalid input and error message
-# :: indicates ExchangeRateModule::ErrorClass
-
-  # without .to_s what is returned is: #<ExchangeRate::Error:  was not found>
   def test_nothing_entered_in_date_field_gives_error
     assert_equal(" was not found",
     ExchangeRate::Error.new('').to_s)
@@ -53,7 +51,6 @@ class ExchangeRateTest < Minitest::Test
   end
 
 # TESTS FOR SAVE_DATA.RB to check I can get data from api
-  # checks that there are 65 days of info on rates - increases each day?
   def test_can_get_rates_data_and_save
     assert_equal(65, ExchangeRate::SaveData.instance.get_data_and_save.count)
   end
@@ -66,7 +63,6 @@ class ExchangeRateTest < Minitest::Test
     assert_equal(false, ExchangeRate::SaveData.instance.get_data_and_save.has_key?("2018-11-21"))
   end
 
-  # :testing is a key or symbol for the file? Was :test before :save_data
   def test_can_save_api_data_to_file
     ExchangeRate::SaveData.instance.write(:save_data, "Test is a success...")
     assert_equal("Test is a success...", ExchangeRate::SaveData.instance.read(:save_data))
@@ -87,7 +83,6 @@ class ExchangeRateTest < Minitest::Test
     assert_equal(false, ExchangeRate::Conversion.if_string_date_is_valid("fjnajsn"))
   end
 
-  # this previously used BigDecimal
   def test_can_get_exchange_rate_with_date
     assert_equal("1.1667", ExchangeRate::Conversion.get_rate_at_date("2018-09-19", "GBP", "USD"))
   end
@@ -109,8 +104,8 @@ class ExchangeRateTest < Minitest::Test
   # def test_can_get_exchange_rate_today_with_required_format
   #   assert_equal("22.2132", ExchangeRate.at(Date.today, "GBP", "MXN"))
   # end
-  # 
-  # def test_can_get_exchange_rate_yesterday_with_required_format2
+  #
+  # def test_can_get_exchange_rate_yesterday_with_required_format
   #   assert_equal("22.2132", ExchangeRate.at(Date.today.prev_day, "GBP", "MXN"))
   # end
 
@@ -131,12 +126,5 @@ class ExchangeRateTest < Minitest::Test
       ExchangeRate::Conversion.get_rate_at_date("ZOO", "GBP")
     end
   end
-
-  # following give assertion but 1 failure too - error not raised
-  # def test_invalid_currency_raises_error
-  #   assert_raises(ExchangeRate::Error) do
-  #   ExchangeRate::Conversion.get_rate_at_date("BLA", "ALG")
-  #   end
-  # end
 
 end
