@@ -16,7 +16,7 @@ Or install it yourself as:
 
 This production-ready Ruby code builds a library of FX rates pulled from the European Central Bank: https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml
 
-The definition of production-ready: I believe that production-ready is when the app can accurately supply exchange rates detailed in the European Central bank api to GBP. This code is production-ready as it passes all tests for all currencies.
+The definition of production-ready: I believe this is when the app can accurately supply exchange rates detailed in the European Central bank api to GBP. This code is production-ready as it passes all tests for all currencies.
 
 ## How does it work?
 
