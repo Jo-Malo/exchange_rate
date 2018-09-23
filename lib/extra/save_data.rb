@@ -1,29 +1,31 @@
 require "yaml/store"
-######## for parsing XML data from api
+
 require "nokogiri"
 require "open-uri"
 require "singleton"
-########
 
 module ExchangeRate
   class SaveData
-    ######
+
     include Singleton
 
-    attr_reader :endpoint, :xmlns
-    #######
+    attr_reader :datasource, :xmlns
+
     def initialize(spec_folder = "#{Dir.pwd}")
       @store = YAML::Store.new("#{spec_folder}/rates_data/data_saved")
-      #######
-      @endpoint = "https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml"
+
+      @datasource = "https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml"
       @xmlns = "http://www.ecb.int/vocabulary/2002-08-01/eurofxref"
-      #######
     end
 
 
 
-    def set_store(file_path)
+    def create_store(file_path)
       @store = YAML::Store.new("#{Dir.pwd}/data_saved")
+    end
+
+    def read(key)
+      return @store.transaction { @store[key] }
     end
 
     def write(key, value)
@@ -32,63 +34,42 @@ module ExchangeRate
       end
     end
 
-    def read(key)
-      return @store.transaction { @store[key] }
-    end
-
     def delete(key)
       @store.transaction do
         @store.delete(key)
       end
     end
 
-    ######################################################################
-    # methods for parsing the xml data
 
-    def set_data_source(new_endpoint, new_xmlns = nil)
-      @endpoint = new_endpoint
-      @xmlns = new_xmlns
-
-      SaveData.instance.delete(:data_saved)
-    end
-
+# methods for parsing and navigating the xml data
     def get_data_and_save
-      all_data = fetch_data
+      all_data = prefetch_data
       data_saved_hash = create_data_saved_hash(all_data)
-
-    # if data_saved_hash.empty?
-      #   raise EmptyFxDataHashError.new
-      # else
-        SaveData.instance.write(:data_saved, data_saved_hash)
+      SaveData.instance.write(:data_saved, data_saved_hash)
       return data_saved_hash
-      # end
     end
 
-    # private
-
-    def fetch_data
-      doc = Nokogiri::XML(open(@endpoint))
+    def prefetch_data
+      doc = Nokogiri::XML(open(@datasource))
       return doc
     end
 
     def create_data_saved_hash(data)
-
       data_saved_hash = Hash.new
+      xml_cube_time = get_xml_cube_time(data)
 
-      time_cubes = extract_time_cubes(data)
-
-      time_cubes.each do |cube|
-        data_saved_hash[cube.at_xpath("@time").value] = create_currencies_and_rates_hash(cube)
+      xml_cube_time.each do |time|
+        data_saved_hash[time.at_xpath("@time").value] = create_currencies_and_rates_hash(time)
       end
       return data_saved_hash
     end
 
-    def extract_time_cubes(data)
+    def get_xml_cube_time(data)
       if @xmlns == nil
-        time_cubes = data.xpath("//Cube[@time]")
-        p time_cubes
+        xml_cube_time = data.xpath("//Cube[@time]")
+        p xml_cube_time
       else
-        time_cubes = data.xpath("//a:Cube[@time]", {"a" => @xmlns})
+        xml_cube_time = data.xpath("//a:Cube[@time]", {"a" => @xmlns})
       end
     end
 
@@ -101,8 +82,7 @@ module ExchangeRate
       currencies_and_rates.each do |currency_and_rate|
         currencies_and_rates_hash[currency_and_rate.at_xpath("@currency").value] = currency_and_rate.at_xpath("@rate").value
       end
-
-      return currencies_and_rates_hash
+        return currencies_and_rates_hash
     end
 
   end

@@ -5,12 +5,12 @@ require "open-uri"
 
 module ExchangeRate
 
-  def self.set_store(file_path)
-    SaveData.instance.set_store(file_path)
+  def self.create_store(file_path)
+    SaveData.instance.create_store(file_path)
   end
 
-  def self.set_data_source(new_endpoint, new_xmlns = nil)
-    SaveData.instance.set_data_source(new_endpoint, new_xmlns)
+  def self.set_data_source(new_datasource, new_xmlns = nil)
+    SaveData.instance.set_data_source(new_datasource, new_xmlns)
   end
 
   def self.at(today = Date.today, from_currency, to_currency)
