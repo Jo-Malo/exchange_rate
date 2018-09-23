@@ -3,14 +3,6 @@
 ```ruby
 gem 'exchange_rate'
 ```
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install exchange_rate
-
 
 ## Introduction
 
@@ -27,7 +19,7 @@ ExchangeRate.at(Date.today,'GBP','USD')
 ExchangeRate.at(Date.yesterday, "GBP", "USD")
 ExchangeRate.at(Date.today, "GBP", "EUR")
 ```
-
+The code has been setup to start working as a simple UI with Sinatra. For this reason we have the two files: app.rb and views/index.erb. This can be developed to a fuller extent and given more views with time.
 
 ## Dependencies
 
