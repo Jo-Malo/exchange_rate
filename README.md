@@ -36,7 +36,7 @@ ExchangeRate.at(Date.today, "GBP", "EUR")
 ```
 gem install nokogiri
 gem install open-uri
-~~~
+```
 
 ## What if the service is down?
 
