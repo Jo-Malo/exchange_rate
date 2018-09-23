@@ -19,7 +19,10 @@ ExchangeRate.at(Date.today,'GBP','USD')
 ExchangeRate.at(Date.yesterday, "GBP", "USD")
 ExchangeRate.at(Date.today, "GBP", "EUR")
 ```
-The code has been setup to start working as a simple UI with Sinatra. For this reason we have the two files: app.rb and views/index.erb. This can be developed to a fuller extent and given more views with time.
+The code has been setup to start working as a simple UI with sinatra and Sinatra-contrib. For this reason we have the two files: app.rb and views/index.erb. This can be developed to a fuller extent and given more views with time. To run this, simply use the following in the command line:
+```
+ruby app.rb
+```
 
 ## Dependencies
 
@@ -32,7 +35,7 @@ gem install open-uri
 
 ## What if the service is down?
 
-If THE ECB service is down then the library is designed to return an error message. Once the data has been fetched, you should still have previous data to obtain most recent rates.
+If ECB service is down then the library is designed to return an error message. Once the data has been fetched, you should still have previous data to obtain most recent rates.
 
 ## Limitations
 
