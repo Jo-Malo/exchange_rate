@@ -9,7 +9,7 @@ module ExchangeRate
     SaveData.instance.create_store(file_path)
   end
 
-  def self.set_data_source(new_datasource, new_xmlns = nil)
+  def self.set_data_source(new_datasource, new_xmlns)
     SaveData.instance.set_data_source(new_datasource, new_xmlns)
   end
 
