@@ -1,6 +1,7 @@
 # exchange_rate
 
 ##Product aim:
+
 ```ruby
 gem 'exchange_rate'
 ```
