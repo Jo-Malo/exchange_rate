@@ -19,7 +19,7 @@ module ExchangeRate
     end
 
 
-
+# CRUD type methods
     def create_store(file_path)
       @store = YAML::Store.new("#{Dir.pwd}/data_saved")
     end
