@@ -44,3 +44,9 @@ If ECB service is down then the library is designed to return an error message. 
 This app will only return your requested exchange rates on the requested day. It isn't currently configured to return an exchange rate to a requested amount. This is something I'd happily add with more development.
 
 Finally, I have only just made this into a gem with Bundler. For this reason further development work is required to make a CLI with Thor and to release the gem.  
+
+## Additional resources
+
+Please feel free to have a quick look at the trello board I was working with throughout the project:
+
+![Trello](trello.png)
