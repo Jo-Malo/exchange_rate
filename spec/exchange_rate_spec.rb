@@ -1,7 +1,7 @@
 require_relative "../lib/exchange_rate"
-require_relative "../lib/extra/save_data"
-require_relative "../lib/extra/error"
-require_relative "../lib/extra/conversion"
+require_relative "../lib/helper/save_data"
+require_relative "../lib/helper/error"
+require_relative "../lib/helper/conversion"
 require "minitest/autorun"
 require 'simplecov'
 
@@ -16,15 +16,15 @@ class ExchangeRateTest < Minitest::Test
 
 # TESTS FOR SAVE_DATA.RB to check I can get data from api
   def test_can_get_rates_data_and_save
-    assert_equal(65, ExchangeRate::SaveData.instance.get_data_and_save.count)
+    assert_equal(65, ExchangeRate::SaveData.instance.save_data_away.count)
   end
 
   def test_can_check_existing_key_returns_true
-    assert_equal(true, ExchangeRate::SaveData.instance.get_data_and_save.has_key?("2018-09-21"))
+    assert_equal(true, ExchangeRate::SaveData.instance.save_data_away.has_key?("2018-09-21"))
   end
 
   def test_can_check_absent_key_returns_false
-    assert_equal(false, ExchangeRate::SaveData.instance.get_data_and_save.has_key?("2018-11-21"))
+    assert_equal(false, ExchangeRate::SaveData.instance.save_data_away.has_key?("2018-11-21"))
   end
 
   def test_can_save_api_data_to_file
@@ -52,14 +52,14 @@ class ExchangeRateTest < Minitest::Test
     assert_equal("1.1667", ExchangeRate::Conversion.get_rate_at_date("2018-09-19", "GBP", "USD"))
   end
 
-  # written on 21 Sept
-  def test_can_get_exchange_rate_with_earliest_date
-    assert_equal("15.8282", ExchangeRate::Conversion.get_rate_at_date("2018-06-25", "GBP", "ZAR"))
-  end
-  # written on 21 Sept
-  def test_can_get_exchange_rate_at_latest_date
-    assert_equal("22.2132", ExchangeRate::Conversion.get_rate_at_date("2018-09-21", "GBP", "MXN"))
-  end
+  # written on 21 Sept and passed
+  # def test_can_get_exchange_rate_with_earliest_date
+  #   assert_equal("15.8282", ExchangeRate::Conversion.get_rate_at_date("2018-06-25", "GBP", "ZAR"))
+  # end
+  # # written on 21 Sept and passed
+  # def test_can_get_exchange_rate_at_latest_date
+  #   assert_equal("22.2132", ExchangeRate::Conversion.get_rate_at_date("2018-09-21", "GBP", "MXN"))
+  # end
 
 
 # TESTS TO CHECK EXCHANGE_RATE.RB methods can be used to query
@@ -67,7 +67,7 @@ class ExchangeRateTest < Minitest::Test
     assert_equal("22.2132", ExchangeRate.at("2018-09-21", "GBP", "MXN"))
   end
 
-  # written on 24th Sept which passed but won't as todays date changes
+  # written on 24th Sept which passed but won't thereafter when Date.today changes
   # def test_can_get_exchange_rate_today_with_required_format
   #   assert_equal("22.2132", ExchangeRate.at(Date.today, "GBP", "MXN"))
   # end
